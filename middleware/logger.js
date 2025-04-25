@@ -2,7 +2,7 @@
 const Log = require("../models/Log");
 
 // Log each request to the database
-const logRequest = async (req, res, next) => {
+exports.logRequest = async (req, res, next) => {
   try {
     // Assuming you have a user object attached to req.user (from authentication middleware)
     const user = req.user ? req.user._id : null; // Get the user ID from the request (authentication should add this)
@@ -26,5 +26,3 @@ const logRequest = async (req, res, next) => {
     next(); // Allow the request to continue even if the log fails
   }
 };
-
-module.exports = logRequest;

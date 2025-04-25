@@ -10,6 +10,7 @@ const {
 
 //include other resource routers
 const bookingRouter = require("./bookings");
+const { logRequest } = require("../middleware/logger");
 
 const router = express.Router();
 
@@ -18,12 +19,12 @@ router.use("/:dentistId/bookings/", bookingRouter);
 
 router
   .route("/")
-  .get(getDentists)
-  .post(protect, authorize("admin"), createDentist);
+  .get(logRequest, getDentists)
+  .post(protect, authorize("admin"), logRequest, createDentist);
 router
   .route("/:id")
-  .get(getDentist)
-  .put(protect, authorize("admin"), updateDentist)
-  .delete(protect, authorize("admin"), deleteDentist);
+  .get(logRequest, getDentist)
+  .put(protect, authorize("admin"), logRequest, updateDentist)
+  .delete(protect, authorize("admin"), logRequest, deleteDentist);
 
 module.exports = router;

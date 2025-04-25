@@ -17,8 +17,6 @@ app.use(cors());
 app.use(express.json());
 // //cookieparser
 app.use(cookieParser());
-
-app.use(logRequest);
 // //Rout files
 const dentists = require("./routes/dentists");
 app.use("/api/v1/dentists", dentists);

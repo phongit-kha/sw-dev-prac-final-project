@@ -6,7 +6,7 @@ const Log = require("../models/Log");
 // @access  Private
 exports.getLogs = async (req, res, next) => {
   try {
-    const logs = await Log.find().sort({ createdAt: -1 });
+    const logs = await Log.find().sort({ createAt: -1 });
     res.status(200).json({
       success: true,
       data: logs,
