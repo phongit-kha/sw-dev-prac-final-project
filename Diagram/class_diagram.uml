@@ -1,0 +1,127 @@
+@startuml "Dentist Booking System"
+
+skinparam class {
+  BackgroundColor #DCEBFC
+  BorderColor #2C5AA0
+  ArrowColor #2C5AA0
+  FontSize 12
+}
+
+skinparam stereotypeCBackgroundColor #ADD1FF
+skinparam packageBackgroundColor #FFFFFF
+
+' Application Service
+class Dentist <<Application>> {
+  /api/v1
+}
+
+' Resource: Auth
+class Auth <<Resource>> {
+  <<Path>> /api/v1/auth
+  <<POST>> + register(name, telephone, email, password): User
+  <<POST>> + login(email, password): Token
+  <<GET>> + logout(): void
+  <<GET>> + getMe(): User
+}
+
+' Resource: Dentist
+class Dentist <<Resource>> {
+  <<Path>> /api/v1/dentists
+  - id: ObjectID
+  - name: String
+  - address: String
+  - district: String
+  - province: String
+  - postalcode: String
+  - website: String
+  - description: String
+  - tel: String
+  - maxSlots: Number
+  <<GET>> + getDentists(): Dentist[]
+  <<GET>> + getDentist(id): Dentist
+  <<POST>> + createDentist(): Dentist
+  <<PUT>> + updateDentist(id): Dentist
+  <<DELETE>> + deleteDentist(id): void
+}
+
+' Resource: Booking
+class Booking <<Resource>> {
+  <<Path>> /api/v1/bookings
+  - id: ObjectID
+  - bookingDate: Date
+  - user: ObjectID
+  - company: ObjectID
+  - createAt: Date
+  <<GET>> + getBookings(): Booking[]
+  <<GET>> + getBooking(id): Booking
+  <<POST>> + addBooking(): Booking
+  <<PUT>> + updateBooking(id): Booking
+  <<DELETE>> + deleteBooking(id): void
+}
+
+' Representation: User
+class UserModel <<Representation>> {
+  - id: ObjectID
+  - name: String
+  - telephone: String
+  - email: String
+  - password: String
+  - role: String
+  - resetPasswordToken: String
+  - resetPasswordExpire: Date
+  - resume: String
+  - createdAt: Date
+  + getSignedJwtToken(): String
+  + matchPassword(password): Boolean
+}
+
+' Representation: Dentist
+class DentistModel <<Representation>> {
+  - id: ObjectID
+  - name: String
+  - gender: String
+  - address: String
+  - district: String
+  - province: String
+  - postalcode: String
+  - tel: String
+  - year_of_experience: Number
+  - area_of_expertise: String
+}
+
+' Representation: Booking
+class BookingModel <<Representation>> {
+  - id: ObjectID
+  - apptDate: Date
+  - user: ObjectID
+  - dentist: ObjectID
+  - createAt: Date
+}
+
+' Middleware
+class AuthMiddleware <<Middleware>> {
+  + protect(req, res, next): void
+  + authorize(roles[]): Function
+}
+
+' Service layer relationships
+DentistService --> Auth : uses >
+DentistService --> Dentist : uses >
+DentistService --> Booking : uses >
+
+' Resource to Model relationships  
+Auth --> UserModel : <<use>> >
+Dentist --> DentistModel : <<use>> >
+Booking --> BookingModel : <<use>> >
+
+' Cross-resource and API relationships
+Booking --> UserModel : <<use>> >
+
+' Middleware relationships
+Auth --> AuthMiddleware : uses >
+
+' Domain model relationships
+UserModel "1" -- "0..3" BookingModel : creates >
+DentistModel "1" -- "*" BookingModel : hosts >
+
+@enduml

@@ -1,0 +1,21 @@
+@startuml View Dentist List (GET)
+
+title "View Dentist List (GET)"
+
+participant "Client" as client
+participant "<<Node.js>>\n:server" as server
+participant "<<router>>\n:dentists" as routerDentists
+participant "<<controller>>\n:dentists" as controllerDentists
+participant "<<model>>\n:Dentist" as modelDentist
+database "<<MongoDB>>\ndentists" as dentistsDB
+
+client -> server ++ : GET /api/v1/dentists
+server -> routerDentists ++ : router.get('/', getDentists)
+routerDentists -> controllerDentists ++ : getDentists(req, res)
+controllerDentists -> modelDentist ++ : Dentist.find(...).populate('bookings')
+modelDentist -> dentistsDB ++ : query with filters + pagination
+dentistsDB --> modelDentist -- : dentistList[]
+controllerDentist --> routerDentist -- : dentistList[]
+routerDentist -> client -- : 200 OK + data
+
+@enduml

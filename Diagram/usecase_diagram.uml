@@ -1,0 +1,53 @@
+@startuml Dentist Booking
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "User" as user
+actor "Registered User" as regUser
+actor "Admin" as admin
+
+rectangle "Dentist Booking System" {
+  usecase "Register" as UC1
+  usecase "Login" as UC2
+  usecase "Logout" as UC3
+  usecase "Add Booking" as UC4
+  usecase "View Own Bookings" as UC5
+  usecase "Edit Own Booking" as UC6
+  usecase "Delete Own Booking" as UC7
+  usecase "View Any Booking" as UC8
+  usecase "Edit Any Booking" as UC9
+  usecase "Delete Any Booking" as UC10
+  usecase "View Dentists" as UC11
+}
+
+user --> UC1
+user --> UC2
+user --> UC11
+
+regUser --|> user : can use as
+regUser --> UC3
+regUser --> UC4
+regUser --> UC5
+regUser --> UC6
+regUser --> UC7
+
+admin --|> regUser : can use as
+admin --> UC8
+admin --> UC9
+admin --> UC10
+
+note right of UC4
+  Limited to 1 booking max
+end note
+
+note right of UC1
+  specifying
+  - name
+  - telephone 
+  - number
+  - email
+  - password
+end note
+
+@enduml
