@@ -9,7 +9,7 @@ const DentistSchema = new mongoose.Schema(
       trim: true,
       maxlength: [50, "Name can not be more than 50 characters"],
     },
-    yearofExperience: {
+    year_of_experience: {
       type: Number,
       required: [true, "Please add year of experience"],
     },
@@ -17,6 +17,18 @@ const DentistSchema = new mongoose.Schema(
       type: String,
       enum: ["Male", "Female", "LGBTQ+"],
       required: [true, "Please add your gender"],
+    },
+    area_of_expertise: {
+      type: String,
+      enum: [
+        "General Dentistry",
+        "Orthodontics",
+        "Pediatric Dentistry",
+        "Periodontics",
+        "Cosmetic Dentistry",
+        "Oral Surgery",
+      ],
+      required: [true, "Please add area of expertise"],
     },
     address: {
       type: String,
