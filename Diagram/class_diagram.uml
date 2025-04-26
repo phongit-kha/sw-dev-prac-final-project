@@ -33,10 +33,10 @@ class Dentist <<Resource>> {
   - district: String
   - province: String
   - postalcode: String
-  - website: String
-  - description: String
+  - year_of_experience: Number
+  - area_of_expertise: String
+  - gender: Enum
   - tel: String
-  - maxSlots: Number
   <<GET>> + getDentists(): Dentist[]
   <<GET>> + getDentist(id): Dentist
   <<POST>> + createDentist(): Dentist
@@ -50,7 +50,7 @@ class Booking <<Resource>> {
   - id: ObjectID
   - bookingDate: Date
   - user: ObjectID
-  - company: ObjectID
+  - dentist: ObjectID
   - createAt: Date
   <<GET>> + getBookings(): Booking[]
   <<GET>> + getBooking(id): Booking
